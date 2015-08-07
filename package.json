@@ -1,0 +1,16 @@
+{
+  "name": "file-explorer",
+  "version": "0.0.1",
+  "description": "一个基于命令行的文件浏览器",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "甜脆",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "colors": "^1.1.2",
+    "gulp": "^3.9.0",
+    "gulp-uglify": "^1.2.0"
+  }
+}
