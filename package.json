@@ -10,7 +10,6 @@
   "license": "GPL-3.0",
   "dependencies": {
     "colors": "^1.1.2",
-    "gulp": "^3.9.0",
-    "gulp-uglify": "^1.2.0"
+    "readline-sync": "^1.2.19"
   }
 }

@@ -5,44 +5,54 @@
 
 var fs = require('fs');
 var colors = require('colors/safe');
-var readline = require('readline');
+var readlineSync = require('readline-sync');
 
 
+while(true) {
+    var files = fs.readdirSync(process.cwd());
+    showFiles(files);
 
-fs.readdir(process.cwd(), function (err, files) {
-    var stats = [];
+    console.log(colors.magenta('\nb: ' + colors.magenta('Back')));
+    console.log(colors.red("e: ") + colors.red('Exit'));
+    var choice = readlineSync.question("\n请输入要查看的文件: ");
+    if (choice === 'b') {
+        process.chdir('../');
+        continue
+    } else if (choice === 'e') {
+        process.exit(0);
+    }
+    choice = parseInt(choice);
+    if (isNaN(choice)) {
+        process.exit(1);
+    } else if (choice >= 0 && choice < files.length){
+        handleFiles(files[choice]);
+    } else {
+        console.log(colors.red('不存在的文件'));
+    }
+}
+
+/**
+ * 把文件展示给用户
+ * @param files
+ * @return void
+ */
+function showFiles(files:Array<string>):void {
     files.forEach(function (item, index, array) {
         var stat = fs.statSync(item);
-        stats[index] = stat;
         if (stat.isDirectory()) {
             console.log(colors.gray(index + ': ') + colors.blue(item + '/'));
         } else if (stat.isFile()) {
             console.log(colors.gray(index + ': ') + colors.green(item));
         }
     });
-    var rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-    });
-    rl.question("\n请输入要查看的文件: ", function(answer) {
-        handle(answer);
-        rl.close();
-    });
-    function handle(choice:number) {
-        if (stats[choice].isDirectory()) {
-            var _files = fs.readdirSync(files[choice]);
-            _files.forEach(function (item, index, array) {
-                var _stat = fs.statSync(process.cwd() + '/' + files[choice] + '/' + item);
-                if (_stat.isDirectory()) {
-                    console.log(colors.gray(index + ': ') + colors.blue(item + '/'));
-                } else if (_stat.isFile()) {
-                    console.log(colors.gray(index + ': ') + colors.green(item));
-                }
-            })
-        } else {
-            var _file = fs.readFileSync(files[choice], 'utf-8');
-            console.log(_file);
-        }
-    }
-});
+}
 
+function handleFiles(file:string):void {
+    var stat = fs.statSync(file);
+    if (stat.isDirectory()) {
+        process.chdir(file);
+    } else if (stat.isFile()) {
+        var file_content = fs.readFileSync(files[choice], 'utf-8');
+        console.log(colors.yellow(file_content));
+    }
+}
